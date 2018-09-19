@@ -44,7 +44,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.venkat.WordCount</mainClass>
+                            <mainClass>com.venkat.wordcount.WordCount</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
