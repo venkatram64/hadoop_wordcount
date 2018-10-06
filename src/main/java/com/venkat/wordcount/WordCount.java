@@ -39,9 +39,18 @@ public class WordCount {
         private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
 
+        //this is important text
+        //this is another line of text
+
+
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 
-            StringTokenizer itr = new StringTokenizer(value.toString());
+            String line = value.toString();
+            StringTokenizer itr = new StringTokenizer(line);
+            //this
+            //is
+            //important
+            //text
             while (itr.hasMoreTokens()) {
                 word.set(itr.nextToken());
                 context.write(word, one);
@@ -55,6 +64,13 @@ public class WordCount {
         private IntWritable result = new IntWritable();
 
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+            //this,(1,1)
+            //is, (1,1)
+            //important,(1)
+            //text,(1,1)
+            //another,(1)
+            //line,(1)
+            //of,(1)
             int sum = 0;
             for (IntWritable val : values) {
                 sum += val.get();
@@ -76,9 +92,11 @@ public class WordCount {
 
         Job job = Job.getInstance(conf, "word count");
         job.setJarByClass(WordCount.class);
+
         job.setMapperClass(TokenizerMapper.class);
         job.setCombinerClass(IntSumReducer.class);
         job.setReducerClass(IntSumReducer.class);
+
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
