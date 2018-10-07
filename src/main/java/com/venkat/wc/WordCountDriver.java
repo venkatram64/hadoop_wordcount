@@ -11,6 +11,8 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+//this is mapreduce version 1
+
 public class WordCountDriver extends Configured implements Tool {
 
     public static void main(String[] args) throws Exception {
