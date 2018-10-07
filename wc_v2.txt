@@ -1,11 +1,11 @@
 venkat, venkat, ram,ram
-srijan, srijan
-vasudeva, vasudeva
+srijan, srijan,srijan
+vasudeva, vasudeva,vasudeva
 vinny,vinny
-ani,ani
+ani,ani,ani
 laxman,laxman
 bheem,bheem,bheem,bheem,bheem,bheem
-arjun,arujun
+arjun,arjun
 dhram,dharm
 nakul,nakul
-sahadev,shadev
+sahadev,sahadev

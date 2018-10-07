@@ -1,4 +1,5 @@
-package com.venkat.wc2;
+package com.venkat.fb;
+
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -11,14 +12,13 @@ import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
 
-//hadoop mapreduce version 2
+public class FBDriver {
 
-public class WCDriver {
-
-    //bin/hdfs dfs -put /home/venkatram/IdeaProjects/wordcount/wc_v2.txt /user/venkat/wc
-    //bin/hdfs dfs -ls  /user/venkat/wc
-    //bin/hadoop jar /home/venkatram/IdeaProjects/wordcount/target/wordcount-1.0-SNAPSHOT.jar com.venkat.wc2.WCDriver /user/venkat /user/venkat/output
-    //bin/hdfs dfs -cat /user/venkat/output/*
+    //bin/hdfs dfs -mkdir  /user/venkat/fb
+    //bin/hdfs dfs -put /home/venkatram/IdeaProjects/wordcount/odd_even.txt /user/venkat/fb/fb.txt
+    //bin/hdfs dfs -ls  /user/venkat/fb/
+    //bin/hadoop jar /home/venkatram/IdeaProjects/wordcount/target/wordcount-1.0-SNAPSHOT.jar com.venkat.fb.FBDriver /user/venkat/fb/ /user/venkat/fb/output
+    //bin/hdfs dfs -cat /user/venkat/fb/output/*
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
@@ -32,17 +32,16 @@ public class WCDriver {
         }
 
         Path input=new Path(files[0]);
-
         Path output=new Path(files[1]);
 
-        Job job=new Job(conf,"wordcount");
+        Job job=new Job(conf,"FB");
 
-        job.setJarByClass(WCDriver.class);
-        job.setMapperClass(WCMapper.class);
-        job.setReducerClass(WCReducer.class);
+        job.setJarByClass(FBDriver.class);
+        job.setMapperClass(FBMapper.class);
+        job.setReducerClass(FBReducer.class);
 
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+        job.setOutputValueClass(Text.class);
 
         FileInputFormat.addInputPath(job, input);
         FileOutputFormat.setOutputPath(job, output);

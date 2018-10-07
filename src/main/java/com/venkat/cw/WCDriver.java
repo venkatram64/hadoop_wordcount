@@ -1,4 +1,4 @@
-package com.venkat.wc2;
+package com.venkat.cw;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -15,10 +15,10 @@ import java.io.IOException;
 
 public class WCDriver {
 
-    //bin/hdfs dfs -put /home/venkatram/IdeaProjects/wordcount/wc_v2.txt /user/venkat/wc
-    //bin/hdfs dfs -ls  /user/venkat/wc
-    //bin/hadoop jar /home/venkatram/IdeaProjects/wordcount/target/wordcount-1.0-SNAPSHOT.jar com.venkat.wc2.WCDriver /user/venkat /user/venkat/output
-    //bin/hdfs dfs -cat /user/venkat/output/*
+    //bin/hdfs dfs -put /home/venkatram/IdeaProjects/wordcount/wc_v2.txt /user/venkat/wc/
+    //bin/hdfs dfs -ls  /user/venkat/wc/
+    //bin/hadoop jar /home/venkatram/IdeaProjects/wordcount/target/wordcount-1.0-SNAPSHOT.jar com.venkat.cw.WCDriver /user/venkat/wc/ /user/venkat/wc/output
+    //bin/hdfs dfs -cat /user/venkat/wc/output/*
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
@@ -35,17 +35,22 @@ public class WCDriver {
 
         Path output=new Path(files[1]);
 
-        Job job=new Job(conf,"wordcount");
+        Job job=new Job(conf,"word count writable");
 
         job.setJarByClass(WCDriver.class);
         job.setMapperClass(WCMapper.class);
         job.setReducerClass(WCReducer.class);
 
-        job.setOutputKeyClass(Text.class);
+        job.setMapOutputKeyClass(WCWritable.class);
+        job.setMapOutputValueClass(IntWritable.class);
+
+        job.setOutputKeyClass(WCWritable.class);
         job.setOutputValueClass(IntWritable.class);
 
         FileInputFormat.addInputPath(job, input);
         FileOutputFormat.setOutputPath(job, output);
+
+        output.getFileSystem(job.getConfiguration()).delete(output,true);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }

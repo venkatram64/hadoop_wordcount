@@ -1,4 +1,4 @@
-package com.venkat.wc2;
+package com.venkat.sum;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -11,14 +11,13 @@ import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
 
-//hadoop mapreduce version 2
+public class SumDriver {
 
-public class WCDriver {
-
-    //bin/hdfs dfs -put /home/venkatram/IdeaProjects/wordcount/wc_v2.txt /user/venkat/wc
-    //bin/hdfs dfs -ls  /user/venkat/wc
-    //bin/hadoop jar /home/venkatram/IdeaProjects/wordcount/target/wordcount-1.0-SNAPSHOT.jar com.venkat.wc2.WCDriver /user/venkat /user/venkat/output
-    //bin/hdfs dfs -cat /user/venkat/output/*
+    //bin/hdfs dfs -mkdir  /user/venkat/odd_even
+    //bin/hdfs dfs -put /home/venkatram/IdeaProjects/wordcount/odd_even.txt /user/venkat/odd_even/odd_even.txt
+    //bin/hdfs dfs -ls  /user/venkat/odd_even/
+    //bin/hadoop jar /home/venkatram/IdeaProjects/wordcount/target/wordcount-1.0-SNAPSHOT.jar com.venkat.sum.SumDriver /user/venkat/odd_even/ /user/venkat/odd_even/output
+    //bin/hdfs dfs -cat /user/venkat/odd_even/output/*
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
@@ -32,14 +31,13 @@ public class WCDriver {
         }
 
         Path input=new Path(files[0]);
-
         Path output=new Path(files[1]);
 
-        Job job=new Job(conf,"wordcount");
+        Job job=new Job(conf,"summingNumbers");
 
-        job.setJarByClass(WCDriver.class);
-        job.setMapperClass(WCMapper.class);
-        job.setReducerClass(WCReducer.class);
+        job.setJarByClass(SumDriver.class);
+        job.setMapperClass(SumMapper.class);
+        job.setReducerClass(SumReducer.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
@@ -49,4 +47,5 @@ public class WCDriver {
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
+
 }
