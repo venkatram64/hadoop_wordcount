@@ -1,0 +1,6 @@
+1281,Shawn,ARchitect,7890,1481,10
+1381,Jacob,Admin,4560,1481,20
+1481,Flink,Mgr,9580,1681,10
+1581,Richard,Developer,100,1681,40
+1681,Mira,Mgr,5098,1481,10
+1781,John,Developer,6500,1681,10
