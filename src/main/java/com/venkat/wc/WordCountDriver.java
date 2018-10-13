@@ -1,46 +1,51 @@
 package com.venkat.wc;
 
-import org.apache.hadoop.conf.Configured;
+
+import com.venkat.chain.WordCountMapper;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.FileInputFormat;
-import org.apache.hadoop.mapred.FileOutputFormat;
-import org.apache.hadoop.mapred.JobClient;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.util.GenericOptionsParser;
+
+import java.io.IOException;
 
 //this is mapreduce version 1
 
-public class WordCountDriver extends Configured implements Tool {
+public class WordCountDriver {
 
-    public static void main(String[] args) throws Exception {
-        int exitCode = ToolRunner.run(new WordCountDriver(),args);
-        System.exit(exitCode);
-    }
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
-    @Override
-    public int run(String[] strings) throws Exception {
-        if(strings.length < 2){
+        Configuration conf = new Configuration();
+
+        String[] files = new GenericOptionsParser(conf,args).getRemainingArgs();
+
+        if(files.length < 2){
             System.out.println("give input and output directories.");
-            return -1;
+            return ;
         }
 
-        JobConf conf = new JobConf(WordCountDriver.class);
-        FileInputFormat.setInputPaths(conf, new Path(strings[0]));
-        FileOutputFormat.setOutputPath(conf, new Path(strings[1]));
+        Path input=new Path(files[0]);
 
-        conf.setMapperClass(WordCountMapper.class);
-        conf.setReducerClass(WordCountReducer.class);
+        Path output=new Path(files[1]);
 
-        conf.setMapOutputKeyClass(Text.class);
-        conf.setMapOutputValueClass(IntWritable.class);
+        Job job=new Job(conf,"wordcount");
 
-        conf.setOutputKeyClass(Text.class);
-        conf.setOutputValueClass(IntWritable.class);
+        job.setJarByClass(WordCountDriver.class);
+        job.setMapperClass(WordCountMapper.class);
+        job.setReducerClass(WordCountReducer.class);
 
-        JobClient.runJob(conf);
-        return 0;
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(IntWritable.class);
+
+        FileInputFormat.addInputPath(job, input);
+        FileOutputFormat.setOutputPath(job, output);
+
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
+
+
 }
